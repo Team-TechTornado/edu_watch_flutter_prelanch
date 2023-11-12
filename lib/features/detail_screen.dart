@@ -1,7 +1,6 @@
 import 'package:edu_watch/constants/form_button.dart';
 import 'package:edu_watch/constants/gaps.dart';
 import 'package:edu_watch/constants/sizes.dart';
-import 'package:edu_watch/features/main_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,28 +12,14 @@ class EmailScreen extends StatefulWidget {
 }
 
 class _EmailScreenState extends State<EmailScreen> {
-  final TextEditingController _emailController = TextEditingController();
-
-  String _email = "";
-
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(() {
-      setState(() {
-        _email = _emailController.text;
-      });
-    });
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
     super.dispose();
-  }
-
-  void _onScaffoldTap() {
-    FocusScope.of(context).unfocus();
   }
 
   void _onSubmit() async {
@@ -49,11 +34,15 @@ class _EmailScreenState extends State<EmailScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onScaffoldTap,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
             "EduWatch",
+            style: TextStyle(
+              fontSize: Sizes.size28,
+              fontWeight: FontWeight.w900,
+              color: Colors.black,
+            ),
           ),
         ),
         body: Padding(

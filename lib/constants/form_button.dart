@@ -16,7 +16,7 @@ class FormButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: 1,
+      widthFactor: 0.8,
       child: AnimatedContainer(
         padding: const EdgeInsets.symmetric(
           vertical: Sizes.size16,

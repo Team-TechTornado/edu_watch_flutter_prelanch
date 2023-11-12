@@ -5,40 +5,91 @@ import 'package:edu_watch/features/detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernumberController = TextEditingController();
 
-  String _username = "";
+  String _usernumber = "";
+  String _warningText = "기본적인 정보를 입력해주세요.";
+  bool _isValid = false;
 
   @override
   void initState() {
     super.initState();
-    _usernameController.addListener(() {
+    _usernumberController.addListener(() {
       setState(() {
-        _username = _usernameController.text;
+        _usernumber = _usernumberController.text;
       });
     });
   }
 
+  void _showAlertDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("퇴실하셨습니다"),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("확인"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void dispose() {
-    _usernameController.dispose();
+    _usernumberController.dispose();
     super.dispose();
   }
 
+  void isValid() {
+    // 정수로만 구성되어 있는지 확인
+    if (_usernumber.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(_usernumber)) {
+      setState(() {
+        _warningText = "숫자만 입력해주세요.";
+      });
+      return;
+    } else if (_usernumber.length != 11) {
+      setState(() {
+        _warningText = "전화번호를 11자리로 입력해주세요.";
+      });
+      return;
+    } else {
+      _isValid = true;
+    }
+  }
+
   void _onNextTap() {
-    if (_username.isEmpty) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const EmailScreen(),
-      ),
-    );
+    isValid();
+    // 유효한 경우 다음 화면으로 이동
+    if (_isValid) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const EmailScreen(),
+        ),
+      );
+    }
+    _isValid = false;
+  }
+
+  void _onExitTap() {
+    isValid();
+    if (_isValid) {
+      _showAlertDialog("오늘 하루도 수고하셨습니다.");
+    }
+
+    _isValid = false;
   }
 
   @override
@@ -47,6 +98,11 @@ class _SignInScreenState extends State<SignInScreen> {
       appBar: AppBar(
         title: const Text(
           "EduWatch",
+          style: TextStyle(
+            fontSize: Sizes.size28,
+            fontWeight: FontWeight.w900,
+            color: Colors.black,
+          ),
         ),
       ),
       body: Padding(
@@ -74,9 +130,9 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             Gaps.v16,
             TextField(
-              controller: _usernameController,
+              controller: _usernumberController,
               decoration: InputDecoration(
-                hintText: "전화번호",
+                hintText: "'-' 없이 입력하세요.",
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.grey.shade400,
@@ -88,25 +144,41 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              cursorColor: Theme.of(context).primaryColor,
+              cursorColor: Theme.of(context).primaryColorLight,
             ),
-            Gaps.v28,
-            GestureDetector(
-              onTap: _onNextTap,
-              child: FormButton(
-                disabled: _username.isEmpty,
-                innerText: "입실",
-                buttonColor: Theme.of(context).primaryColorLight,
+            Gaps.v10,
+            Text(
+              _warningText,
+              style: TextStyle(
+                fontSize: Sizes.size14,
+                color: Colors.red,
               ),
             ),
             Gaps.v28,
-            GestureDetector(
-              onTap: _onNextTap,
-              child: FormButton(
-                disabled: _username.isEmpty,
-                innerText: "퇴실",
-                buttonColor: Theme.of(context).primaryColor,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _onNextTap,
+                    child: FormButton(
+                      disabled: _usernumber.isEmpty,
+                      innerText: "입실",
+                      buttonColor: Theme.of(context).primaryColorLight,
+                    ),
+                  ),
+                ),
+                Gaps.v28,
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _onExitTap,
+                    child: FormButton(
+                      disabled: _usernumber.isEmpty,
+                      innerText: "퇴실",
+                      buttonColor: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

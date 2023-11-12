@@ -16,6 +16,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   String _usernumber = "";
   String _warningText = "기본적인 정보를 입력해주세요.";
+  bool _isValid = false;
 
   @override
   void initState() {
@@ -27,35 +28,68 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
+  void _showAlertDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("퇴실하셨습니다"),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("확인"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void dispose() {
     _usernumberController.dispose();
     super.dispose();
   }
 
-  void _onNextTap() {
+  void isValid() {
     // 정수로만 구성되어 있는지 확인
     if (_usernumber.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(_usernumber)) {
       setState(() {
         _warningText = "숫자만 입력해주세요.";
       });
       return;
-    }
-
-    // 11자리인지 확인
-    if (_usernumber.length != 11) {
+    } else if (_usernumber.length != 11) {
       setState(() {
         _warningText = "전화번호를 11자리로 입력해주세요.";
       });
       return;
+    } else {
+      _isValid = true;
+    }
+  }
+
+  void _onNextTap() {
+    isValid();
+    // 유효한 경우 다음 화면으로 이동
+    if (_isValid) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const EmailScreen(),
+        ),
+      );
+    }
+    _isValid = false;
+  }
+
+  void _onExitTap() {
+    isValid();
+    if (_isValid) {
+      _showAlertDialog("오늘 하루도 수고하셨습니다.");
     }
 
-    // 유효한 경우 다음 화면으로 이동
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const EmailScreen(),
-      ),
-    );
+    _isValid = false;
   }
 
   @override
@@ -136,7 +170,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Gaps.v28,
                 Expanded(
                   child: GestureDetector(
-                    onTap: _onNextTap,
+                    onTap: _onExitTap,
                     child: FormButton(
                       disabled: _usernumber.isEmpty,
                       innerText: "퇴실",

@@ -50,7 +50,7 @@ class _EmailScreenState extends State<EmailScreen> {
             horizontal: Sizes.size36,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Gaps.v40,
               const Text(
@@ -61,12 +61,14 @@ class _EmailScreenState extends State<EmailScreen> {
                 ),
               ),
               Gaps.v28,
-              GestureDetector(
-                onTap: _onSubmit,
-                child: FormButton(
-                  disabled: false,
-                  innerText: "디스코드 입장하기",
-                  buttonColor: Theme.of(context).primaryColorLight,
+              Center(
+                child: GestureDetector(
+                  onTap: _onSubmit,
+                  child: FormButton(
+                    disabled: false,
+                    innerText: "디스코드 입장하기",
+                    buttonColor: Theme.of(context).primaryColorLight,
+                  ),
                 ),
               ),
             ],

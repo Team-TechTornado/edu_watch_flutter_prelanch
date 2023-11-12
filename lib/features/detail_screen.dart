@@ -3,6 +3,7 @@ import 'package:edu_watch/constants/gaps.dart';
 import 'package:edu_watch/constants/sizes.dart';
 import 'package:edu_watch/features/main_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmailScreen extends StatefulWidget {
   const EmailScreen({super.key});
@@ -32,28 +33,17 @@ class _EmailScreenState extends State<EmailScreen> {
     super.dispose();
   }
 
-  String? _isEmailValid() {
-    if (_email.isEmpty) return null;
-    final regExp = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    if (!regExp.hasMatch(_email)) {
-      return "Email not valid";
-    }
-    return null;
-  }
-
   void _onScaffoldTap() {
     FocusScope.of(context).unfocus();
   }
 
-  void _onSubmit() {
-    if (_email.isEmpty || _isEmailValid() != null) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const UsernameScreen(),
-      ),
-    );
+  void _onSubmit() async {
+    const url = 'https://discord.gg/WyEJa8BB';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -63,7 +53,7 @@ class _EmailScreenState extends State<EmailScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Sign up",
+            "EduWatch",
           ),
         ),
         body: Padding(
@@ -75,39 +65,19 @@ class _EmailScreenState extends State<EmailScreen> {
             children: [
               Gaps.v40,
               const Text(
-                "What is your email?",
+                "환영합니다!",
                 style: TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Gaps.v16,
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                onEditingComplete: _onSubmit,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  hintText: "Email",
-                  errorText: _isEmailValid(),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                ),
-                cursorColor: Theme.of(context).primaryColor,
-              ),
               Gaps.v28,
               GestureDetector(
                 onTap: _onSubmit,
                 child: FormButton(
-                  disabled: _email.isEmpty || _isEmailValid() != null,
+                  disabled: false,
+                  innerText: "디스코드 입장하기",
+                  buttonColor: Theme.of(context).primaryColorLight,
                 ),
               ),
             ],

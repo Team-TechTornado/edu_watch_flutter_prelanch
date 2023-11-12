@@ -4,14 +4,14 @@ import 'package:edu_watch/constants/sizes.dart';
 import 'package:edu_watch/features/detail_screen.dart';
 import 'package:flutter/material.dart';
 
-class UsernameScreen extends StatefulWidget {
-  const UsernameScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _usernameController = TextEditingController();
 
   String _username = "";
@@ -46,7 +46,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Sign up",
+          "EduWatch",
         ),
       ),
       body: Padding(
@@ -58,7 +58,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
           children: [
             Gaps.v40,
             const Text(
-              "Create username",
+              "전화 번호",
               style: TextStyle(
                 fontSize: Sizes.size24,
                 fontWeight: FontWeight.w700,
@@ -66,7 +66,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             ),
             Gaps.v8,
             const Text(
-              "You can always change this later.",
+              "학부모 전화번호를 입력하세요.",
               style: TextStyle(
                 fontSize: Sizes.size16,
                 color: Colors.black54,
@@ -76,7 +76,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
-                hintText: "Username",
+                hintText: "전화번호",
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.grey.shade400,
@@ -93,7 +93,20 @@ class _UsernameScreenState extends State<UsernameScreen> {
             Gaps.v28,
             GestureDetector(
               onTap: _onNextTap,
-              child: FormButton(disabled: _username.isEmpty),
+              child: FormButton(
+                disabled: _username.isEmpty,
+                innerText: "입실",
+                buttonColor: Theme.of(context).primaryColorLight,
+              ),
+            ),
+            Gaps.v28,
+            GestureDetector(
+              onTap: _onNextTap,
+              child: FormButton(
+                disabled: _username.isEmpty,
+                innerText: "퇴실",
+                buttonColor: Theme.of(context).primaryColor,
+              ),
             ),
           ],
         ),

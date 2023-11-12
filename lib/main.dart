@@ -2,16 +2,16 @@ import 'package:edu_watch/features/main_home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const TikTokApp());
+  runApp(const EduWatchApp());
 }
 
-class TikTokApp extends StatelessWidget {
-  const TikTokApp({super.key});
+class EduWatchApp extends StatelessWidget {
+  const EduWatchApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TikTok Clone',
+      title: 'EduWatch',
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
@@ -20,8 +20,10 @@ class TikTokApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
         primaryColor: Color(0xFFE9435A),
+        primaryColorLight: Colors.blue,
+        errorColor: Colors.red,
       ),
-      home: UsernameScreen(),
+      home: SignInScreen(),
     );
   }
 }

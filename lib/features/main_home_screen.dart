@@ -2,6 +2,7 @@ import 'package:edu_watch/constants/form_button.dart';
 import 'package:edu_watch/constants/gaps.dart';
 import 'package:edu_watch/constants/sizes.dart';
 import 'package:edu_watch/features/detail_screen.dart';
+import 'package:edu_watch/services/api_sevices.dart';
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -17,6 +18,8 @@ class _SignInScreenState extends State<SignInScreen> {
   String _usernumber = "";
   String _warningText = "기본적인 정보를 입력해주세요.";
   bool _isValid = false;
+  bool _isValidId = false;
+  String _id = "";
 
   @override
   void initState() {
@@ -70,10 +73,27 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  void isValidId() {
+    try {
+      ApiService.getId(_usernumber).then((value) {
+        setState(() {
+          _isValidId = true;
+          _id = value;
+        });
+      });
+    } catch (e) {
+      setState(() {
+        _warningText = "등록되지 않은 전화번호입니다.";
+      });
+      return;
+    }
+  }
+
   void _onNextTap() {
     isValid();
+    isValidId();
     // 유효한 경우 다음 화면으로 이동
-    if (_isValid) {
+    if (_isValid && _isValidId) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const EmailScreen(),
@@ -81,15 +101,17 @@ class _SignInScreenState extends State<SignInScreen> {
       );
     }
     _isValid = false;
+    _isValidId = false;
   }
 
   void _onExitTap() {
     isValid();
-    if (_isValid) {
+    if (_isValid && _isValidId) {
       _showAlertDialog("오늘 하루도 수고하셨습니다.");
     }
 
     _isValid = false;
+    _isValidId = false;
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:edu_watch/constants/sizes.dart';
 import 'package:edu_watch/features/detail_screen.dart';
 import 'package:edu_watch/services/api_sevices.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isValid = false;
   bool _isValidId = false;
   String _id = "";
+  String joinDate = "";
+  String exitDate = "";
 
   @override
   void initState() {
@@ -102,6 +105,10 @@ class _SignInScreenState extends State<SignInScreen> {
     }
     _isValid = false;
     _isValidId = false;
+
+    DateTime now = DateTime.now();
+
+    joinDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
   }
 
   void _onExitTap() {
@@ -112,6 +119,10 @@ class _SignInScreenState extends State<SignInScreen> {
 
     _isValid = false;
     _isValidId = false;
+
+    DateTime now = DateTime.now();
+
+    exitDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
   }
 
   @override

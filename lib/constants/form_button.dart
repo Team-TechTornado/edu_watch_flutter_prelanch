@@ -1,14 +1,17 @@
+import 'package:edu_watch/constants/sizes.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/sizes.dart';
 
 class FormButton extends StatelessWidget {
   const FormButton({
-    super.key,
+    Key? key,
     required this.disabled,
-  });
+    required this.innerText,
+    required this.buttonColor,
+  }) : super(key: key);
 
   final bool disabled;
+  final String innerText;
+  final Color buttonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,7 @@ class FormButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizes.size5),
-          color:
-              disabled ? Colors.grey.shade300 : Theme.of(context).primaryColor,
+          color: disabled ? Colors.grey.shade300 : buttonColor,
         ),
         duration: const Duration(milliseconds: 500),
         child: AnimatedDefaultTextStyle(
@@ -30,8 +32,8 @@ class FormButton extends StatelessWidget {
             color: disabled ? Colors.grey.shade400 : Colors.white,
             fontWeight: FontWeight.w600,
           ),
-          child: const Text(
-            'Next',
+          child: Text(
+            innerText,
             textAlign: TextAlign.center,
           ),
         ),
